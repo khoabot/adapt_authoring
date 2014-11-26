@@ -33,16 +33,13 @@ function randomValueBase64 (len) {
         .replace(/\//g, '0'); // replace '/' with '0'
 }
 
-// prevent installer running if config file already exists
+// prevent installer running if config is not setup
 installer.all('/install*', function (req, res, next) {
   // check if install has completed, redirect to root if so
-  fs.exists(path.join(configuration.serverRoot, 'conf', 'config.json'), function (exists) {
-    if (exists) {
+    if (configuration.getConfig('configLoaded')) {
       return res.redirect('/');
     }
-
     return next();
-  });
 });
 
 // installer landing page
@@ -205,7 +202,6 @@ installer.all('/install/tenant', function (req, res, next) {
       configuration.setConfig('tenantPrefix', tenantPrefix);
       configuration.setConfig('dbName', tenantPrefix + tenantName);
 
-
       // ensure database connection is up
       database.getDatabase(function (error, db) {
         if (error) {
@@ -268,30 +264,25 @@ installer.get('/install/complete', function (req, res, next) {
   // by default, auth is local
   configuration.setConfig('auth', 'local');
   configuration.setConfig('dataRoot', 'data');
-  var cfg = configuration.getConfig();
+  configuration.setConfig('configLoaded', "true");
 
   // write the configuration file
   var app = origin();
   app.configuration = configuration;
-  fs.writeFile(path.join(configuration.serverRoot, 'conf', 'config.json'), JSON.stringify(cfg), function (error) {
-    if (error) {
-      return next(error);
-    }
-
-    // must close connection!
-    res.header('Connection', 'close');
-    res.render('complete', {
-      'pageTitle': 'Installation Complete!',
-      'dashboard': app.getServerURL()
-    });
-
-    // restart server, NB: we reload the config file to be sure that it was correctly written
-    // (we use console.log here instead of logger, since logger may not be correctly configured)
-    configuration.load(path.join(configuration.serverRoot, 'conf', 'config.json'), function (e) {e && console.log(e);});
-    configuration.once('change:config', function () {
-      // skip grunt build
-      return app.restartServer();
-    });
+  // must close connection!
+  res.header('Connection', 'close');
+  res.render('complete', {
+    'pageTitle': 'Installation Complete!',
+    'dashboard': app.getServerURL()
   });
+
+  // restart server, NB: we reload the config file to be sure that it was correctly written
+  // (we use console.log here instead of logger, since logger may not be correctly configured)
+  configuration.load(function (e) {e && console.log(e);});
+  configuration.once('change:config', function () {
+    // skip grunt build
+    return app.restartServer();
+  });
+
 });
 

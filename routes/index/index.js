@@ -10,7 +10,7 @@ server.get('/', function (req, res, next) {
 
 
   // check if config file is loaded, if not, redirect to install
-  if (!configuration.configLoaded) {
+  if (!configuration.getConfig('configLoaded')) {
     return res.redirect('/install');
   }
 

@@ -1,0 +1,1 @@
+{"root":"","useffmpeg":false,"serverName":"localhost","serverPort":"3000","dbType":"mongoose","dbHost":"localhost","dbPort":"27017","dbUser":"","dbPass":"","sessionSecret":"","tenantPrefix":"adapt-tenant-","dbName":"","auth":"local","dataRoot":"data","configLoaded":false}
