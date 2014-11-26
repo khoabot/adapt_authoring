@@ -6,8 +6,11 @@ server.set('views', __dirname);
 server.set('view engine', 'hbs');
 
 server.get('/', function (req, res, next) {
+  // this needs to do more. may have config in memory (from process.env) but still need to load framework, database etc.
+
+
   // check if config file is loaded, if not, redirect to install
-  if (!configuration.configFile) {
+  if (!configuration.configLoaded) {
     return res.redirect('/install');
   }
 
