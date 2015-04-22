@@ -141,18 +141,13 @@ define(function(require){
               }                           
             } else {
               self.resetPreviewProgress();
-              Origin.Notify.error({
-                message: window.polyglot.t('app.errorpreview'),
-                _template: 'alert'
-              });
+              alert('Error generating preview, please contact Administrator');
             }
           },
           error: function (jqXHR, textStatus, errorThrown) {
             self.resetPreviewProgress();
-            Origin.Notify.error({
-              message: window.polyglot.t('app.errorpreview'),
-              _template: 'alert'
-            });
+            alert('Error');
+            
           }
         });
       }
@@ -175,10 +170,7 @@ define(function(require){
             }
           },
           error: function(jqXHR, textStatus, errorThrown) {
-            Origin.Notify.error({
-              error: errorThrown,
-              _template: 'alert'
-            });
+            alert(errorThrown);
             console.log(jqXHR);
             console.log(textStatus);
             console.log(errorThrown);
@@ -218,10 +210,7 @@ define(function(require){
         },
         success: function (jqXHR, textStatus, errorThrown) {
           if (!jqXHR.success) {
-            Origin.Notify.warn({
-              message: jqXHR.message,
-              _template: 'alert'
-            });
+            alert(jqXHR.message);
             console.log(jqXHR);
           } else {
             Origin.editor.clipboardId = jqXHR.clipboardId;
@@ -230,10 +219,7 @@ define(function(require){
           }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-          Origin.Notify.error({
-            message: window.polyglot.t('app.errorcopy'),
-            _template: 'alert'
-          });
+          alert('Error during copy');
           console.log(jqXHR);
           console.log(textStatus);
           console.log(errorThrown);
@@ -254,10 +240,7 @@ define(function(require){
         },
         success: function (jqXHR, textStatus, errorThrown) {
           if (!jqXHR.success) {
-            Origin.Notify.warn({
-              message: jqXHR.message,
-              _template: 'alert'
-            });
+            alert(jqXHR.message);
             console.log(jqXHR);
           } else {
             Origin.editor.clipboardId = null;
@@ -271,10 +254,7 @@ define(function(require){
           }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-          Origin.Notify.error({
-            message: window.polyglot.t('app.errorpaste'),
-            _template: 'alert'
-          });
+          alert('Error during paste');
           console.log(jqXHR);
           console.log(textStatus);
           console.log(errorThrown);
@@ -351,6 +331,8 @@ define(function(require){
       // Let's do a standard check for at least one child object
       var containsAtLeastOneChild = true;
 
+      var alerts = [];
+
       function interateOverChildren(model) {
 
         // Return the function if no children - on components
@@ -359,43 +341,49 @@ define(function(require){
         var currentChildren = model.getChildren();
 
         // Do validate across each item
-        if (!currentChildren.length > 0) {
+        if (currentChildren.length == 0) {
 
           containsAtLeastOneChild = false;
 
-          validationError = "There seems to be a " 
-            + model.get('_type') 
-            + " with the title - '" 
-            + model.get('title') 
-            + "' with no " 
-            + model._children;
-          var alertObject = {
-            title: "Validation failed",
-            body: validationError,
-            confirmText: "Ok",
-            _callbackEvent: "editor:courseValidation",
-            _showIcon: true
-          };
+          alerts.push(
+            "There seems to be a "
+              + model.get('_type')
+              + " with the title - '"
+              + model.get('title')
+              + "' with no "
+              + model._children
+          );
 
-          // alert
-          //Origin.trigger('notify:alert', alertObject);
           return;
-
         } else {
 
           // Go over each child and call validation again
           currentChildren.each(function(childModel) {
             interateOverChildren(childModel);
           });
-          
+
         }
 
       }
 
       interateOverChildren(currentCourse);
 
-      return containsAtLeastOneChild;
+      if(alerts.length > 0) {
+        var errorMessage = "";
+        for(var i = 0, len = alerts.length; i < len; i++) {
+          errorMessage += "<li>" + alerts[i] + "</li>";
+        }
 
+        Origin.trigger('notify:alert', {
+          title: "Validation failed",
+          body: errorMessage,
+          confirmText: "Ok",
+          _callbackEvent: "editor:courseValidation",
+          _showIcon: true
+        });
+      }
+
+      return containsAtLeastOneChild;
     }
 
   }, {

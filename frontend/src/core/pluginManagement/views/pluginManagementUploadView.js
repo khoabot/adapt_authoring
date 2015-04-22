@@ -29,6 +29,7 @@ define(function(require){
       this.$('.plugin-form').ajaxSubmit({
         error: function(data, status, error) {
           $('.loading').hide();
+
           var message = window.polyglot.t('app.errorpluginupload');
           if (data && data.responseJSON && data.responseJSON.error) {
             message += ":\n\n" + data.responseJSON.error;
@@ -39,6 +40,8 @@ define(function(require){
             _template: 'alert'
           });
 
+          // go back to the upload, maybe handle this in the sidebar?
+          Origin.router.navigate('#/pluginManagement/upload', { trigger: true });
         },
         success: function(data, status, xhr) {
           Origin.trigger('scaffold:updateSchemas', function() {
