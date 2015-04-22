@@ -169,7 +169,10 @@ define(function(require){
           _this.remove();
         },
         error: function(model, response) {
-          alert('An error occurred');
+          Origin.Notify.error({
+            message: window.polyglot.t('app.errordataremove'),
+            _template: 'alert'
+          });
         }
       });
     },

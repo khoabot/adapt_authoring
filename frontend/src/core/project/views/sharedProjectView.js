@@ -75,7 +75,10 @@ define(function(require){
           Backbone.history.navigate('/editor/' + data.newCourseId + '/settings', {trigger: true});
         },
         error: function() {
-          alert('error during duplication');
+          Origin.Notify.error({
+            message: window.polyglot.t('app.errorduplication'),
+            _template: 'alert'
+          });
         }
       });
     }

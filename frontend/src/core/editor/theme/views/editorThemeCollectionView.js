@@ -64,7 +64,10 @@ define(function(require) {
       var selectedTheme = this.collection.findWhere({_isSelected: true});
 
       if (selectedTheme === undefined) {
-        alert('No theme selected');
+        Origin.Notify.warn({
+          message: window.polyglot.t('app.errorthemenoselected'),
+          _template: 'alert'
+        });
         return;
       } 
 
@@ -74,7 +77,10 @@ define(function(require) {
 
       $.post('/api/theme/' + selectedThemeId + '/makeitso/' + this.model.get('_courseId'))
         .error(function() {
-          alert('An error occurred doing the save');
+          Origin.Notify.error({
+              message: window.polyglot.t('app.errordatasave'),
+              _template: 'alert'
+          });
         })
         .done(_.bind(function() {
 

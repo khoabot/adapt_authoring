@@ -59,9 +59,12 @@ define(function(require) {
           if (response.success) {
             Backbone.history.navigate('#/user/login', {trigger: true});
           }
-        }, 
+        },
         error: function(model, response, options) {
-          alert('error');
+          Origin.Notify.error({
+            message: window.polyglot.t('app.errorpassreset'),
+            _template: 'alert'
+          });
         }
       });
     }

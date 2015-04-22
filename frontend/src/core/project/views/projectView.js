@@ -85,17 +85,23 @@ define(function(require){
       if (event) {
         event.preventDefault();
       }
-      var id = this.model.get('_id');
-      var deleteProject = {
-          _type: 'prompt',
-          _showIcon: true,
-          title: window.polyglot.t('app.deleteproject'),
-          body: window.polyglot.t('app.confirmdeleteproject') + '<br />' + '<br />' + window.polyglot.t('app.confirmdeleteprojectwarning'),
-          _prompts: [
-            {_callbackEvent: 'editorView:deleteProject:' + id, promptText: window.polyglot.t('app.ok')},
-            {_callbackEvent: '', promptText: window.polyglot.t('app.cancel')}
-          ]
-        };
+
+      Origin.Notify.warn({
+        title: window.polyglot.t('app.deleteproject'),
+        message: window.polyglot.t('app.confirmdeleteproject') + '<br />' + '<br />' + window.polyglot.t('app.confirmdeleteprojectwarning'),
+        _showIcon: true,
+        _prompts: [
+          {
+            label: window.polyglot.t('app.ok'),
+            _callbackEvent: 'editorView:deleteProject:' + this.model.get('_id')
+          },
+          {
+            label: window.polyglot.t('app.cancel')
+          }
+        ],
+        _template: 'alert'
+      });
+
       //Origin.trigger('notify:prompt', deleteProject);
     },
 
@@ -107,7 +113,10 @@ define(function(require){
           self.remove()
         },
         error: function(model, response, options) {
-          alert('Error - ' + response.responseJSON.message);
+          Origin.Notify.error({
+            message: response.responseJSON.message,
+            _template: 'alert'
+          });
         }
       });
     },
@@ -119,7 +128,10 @@ define(function(require){
           Backbone.history.navigate('/editor/' + data.newCourseId + '/settings', {trigger: true});
         },
         error: function() {
-          alert('error during duplication');
+          Origin.Notify.error({
+            message: window.polyglot.t('app.errorduplication'),
+            _template: 'alert'
+          });
         }
       });
     },

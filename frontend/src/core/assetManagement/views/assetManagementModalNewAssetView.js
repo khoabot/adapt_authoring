@@ -97,7 +97,10 @@ define(function(require){
           this.model.set({title: title, description: description});
           this.model.save(null, {
             error: function(model, response, options) {
-              alert('Error updating asset');
+              Origin.Notify.error({
+                message: window.polyglot.t('app.errorupdateasset'),
+                _template: 'alert'
+              });
             },
             success: _.bind(function(model, response, options) {
               Origin.trigger('assetManagement:collection:refresh', true);

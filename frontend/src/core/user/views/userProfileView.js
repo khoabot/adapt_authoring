@@ -107,8 +107,11 @@ define(function(require){
       }
 
       self.model.save({}, {
-        error: function(model, response, optinos) {
-          alert('An error occurred');
+        error: function(model, response, options) {
+          Origin.Notify.error({
+            message: window.polyglot.t('app.errordatasave'),
+            _template: 'alert'
+          });
         },
         success: function(model, response, options) {
           Backbone.history.history.back();

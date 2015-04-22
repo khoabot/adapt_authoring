@@ -61,7 +61,10 @@ define(function(require){
               });
             }, 
             error: function(jqXHR, textStatus, errorThrown) {
-              alert(jqXHR.responseJSON.message);
+              Origin.Notify.error({
+                message: jqXHR.responseJSON.message,
+                _template: 'alert'
+              });
             }
           });
         }

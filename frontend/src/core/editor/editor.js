@@ -102,7 +102,10 @@ define(function(require) {
     _.each(Origin.editor.data, function(object) {
       object.fetch({reset:true,
         error: function(model, response, options) {
-          alert('*****   Oops, something went wrong!  *****');
+          Origin.Notify.error({
+            body: 'app.errordatafetch',
+            _template: 'alert'
+          });
         }
       });
     });  

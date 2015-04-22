@@ -8,7 +8,7 @@ define(function(require) {
   var Router = Backbone.Router.extend({
 
     routes: {
-      ""                                      : "handleIndex",
+      "" : "handleIndex",
       ":module(/*route1)(/*route2)(/*route3)(/*route4)" : "handleRoute"
     },
 
@@ -88,8 +88,12 @@ define(function(require) {
 
       // Verify the user is authenticated
       if (!this.isUserAuthenticated()  && (module !== 'user' && route1 !== 'login')) {
-        alert('Your session has expired, click OK to log on again');
-        return this.redirectToLogin();
+        // TODO fatal, or error?
+        Origin.Notify.fatal({
+          message: 'app.errorsessionexpired',
+          _callback: _.bind(this.redirectToLogin, this),
+          _template: "alert",
+        });
       }
 
       var routeArguments = arguments;

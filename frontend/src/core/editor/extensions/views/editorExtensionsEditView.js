@@ -102,8 +102,11 @@ define(function(require) {
                     }, this);
                 }, this);
             } else {
-                alert('An error occured');
-            }          
+                Origin.Notify.error({
+                  message: ('app.errorpluginadd'),
+                  _template: 'alert'
+                });
+            }
         }, this));
     },
 
@@ -140,8 +143,11 @@ define(function(require) {
                     }, this);
                 }, this);
             } else {
-                alert('An error occured');
-            }          
+                Origin.Notify.error({
+                  message: window.polyglot.t('app.errorpluginremove'),
+                  _template: 'alert'
+                });
+            }
         }, this));
     }
 

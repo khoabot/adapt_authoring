@@ -87,7 +87,10 @@ define(function(require){
           this.model.set({title: title, description: description});
           this.model.save(null, {
             error: function(model, response, options) {
-              alert('Error updating asset');
+              Origin.Notify.error({
+                message: 'app.errorupdateasset',
+                _template: 'alert'
+              });
             },
             success: function(model, response, options) {
               Origin.router.navigate('#/assetManagement', {trigger:true});

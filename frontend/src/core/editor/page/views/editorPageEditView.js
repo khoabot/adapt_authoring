@@ -26,7 +26,10 @@ define(function(require) {
 
       this.model.save(null, {
         error: function() {
-          alert('An error occurred doing the save');
+          Origin.Notify.error({
+              message: window.polyglot.t('app.errordatasave'),
+              _template: 'alert'
+          });
         },
         success: _.bind(function() {
           

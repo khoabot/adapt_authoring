@@ -10,6 +10,7 @@ define(function(require) {
     // TODO useful to have a default value for this? (e.g. log)
     '_type': undefined,
 
+    // TODO this is a test, is this useful?
     initialize: function() {
       this.translateAttribute('title', this.get('title'));
       this.translateAttribute('message', this.get('message'));

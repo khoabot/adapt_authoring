@@ -52,7 +52,11 @@ define(function(require){
           Backbone.history.navigate('#/dashboard', {trigger: true});
         },
         failure: function (err) {
-          alert(window.polyglot.t('app.errorlogginginas'));
+          // TODO pass error?
+          Origin.Notify.error({
+            message: 'app.errorlogginginas',
+            _template: 'alert'
+          });
         }
       });
     },

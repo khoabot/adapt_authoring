@@ -97,7 +97,10 @@ define(function(require) {
 			newComponentModel.save(null, {
           		error: function() {
           			$('html').css('overflow-y', '');
-                	alert('error adding new component');
+					Origin.Notify.error({
+						message: window.polyglot.t('app.errorpluginadd'),
+						_template: 'alert'
+					});
               	},
               	success: _.bind(function() {
               		Origin.editor.data.components.add(newComponentModel);

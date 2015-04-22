@@ -57,7 +57,10 @@ define(function(require) {
           }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-          alert('error');
+          Origin.Notify.error({
+            message: window.polyglot.t('app.errorpassreset'),
+            _template: 'alert'
+          });
         }
       });
     }

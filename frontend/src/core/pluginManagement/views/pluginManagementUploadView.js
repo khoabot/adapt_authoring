@@ -29,12 +29,16 @@ define(function(require){
       this.$('.plugin-form').ajaxSubmit({
         error: function(data, status, error) {
           $('.loading').hide();
-          var message = 'There was an error uploading the plugin';
+          var message = window.polyglot.t('app.errorpluginupload');
           if (data && data.responseJSON && data.responseJSON.error) {
             message += ":\n\n" + data.responseJSON.error;
           }
 
-          alert(message);
+          Origin.Notify.error({
+            message: message,
+            _template: 'alert'
+          });
+
         },
         success: function(data, status, xhr) {
           Origin.trigger('scaffold:updateSchemas', function() {

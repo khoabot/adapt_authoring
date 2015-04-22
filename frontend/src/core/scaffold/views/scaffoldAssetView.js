@@ -164,7 +164,10 @@ define(function(require) {
             // If so, update it ...
                 update.save({ _assetId: courseAssetObject.assetId },{
                     error: function() {
-                        alert('An error occurred doing the save');
+                        Origin.Notify.error({
+                            message: window.polyglot.t('app.errordatasave'),
+                            _template: 'alert'
+                        });
                     },
                     success: function() {
                         Origin.editor.data.courseAssets.fetch({
@@ -187,8 +190,11 @@ define(function(require) {
                     _contentTypeParentId: courseAssetObject.contentTypeParentId
                 },{
                     error: function(error) {
-                        alert('An error occurred doing the save');
-                    }, 
+                        Origin.Notify.error({
+                            message: window.polyglot.t('app.errordatasave'),
+                            _template: 'alert'
+                        });
+                    },
                     success: function() {
                         Origin.editor.data.courseAssets.fetch({
                             reset:true, 
@@ -211,7 +217,10 @@ define(function(require) {
                         Origin.editor.data.courseAssets.fetch({reset:true});
                     },
                     error: function(error) {
-                        console.log('error', error);
+                        Origin.Notify.error({
+                            error: error,
+                            _template: 'alert'
+                        });
                     }
                 });
             }
